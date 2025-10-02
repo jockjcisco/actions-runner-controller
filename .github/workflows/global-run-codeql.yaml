@@ -1,15 +1,15 @@
 name: Run CodeQL
 
 on:
-  push:
-    branches:
-      - master
-  pull_request:
-    branches:
-      - master
-  schedule:
-    - cron: '30 1 * * 0'
-
+  # push:
+  #   branches:
+  #     - master
+  # pull_request:
+  #   branches:
+  #     - master
+  # schedule:
+  #   - cron: '30 1 * * 0'
+  workflow_dispatch:
 concurrency:
   # This will make sure we only apply the concurrency limits on pull requests
   # but not pushes to master branch by making the concurrency group name unique

@@ -1,24 +1,24 @@
 name: Validate Helm Chart
 
 on:
-  pull_request:
-    branches:
-      - master
-    paths:
-      - "charts/**"
-      - ".github/workflows/arc-validate-chart.yaml"
-      - "!charts/actions-runner-controller/docs/**"
-      - "!**.md"
-      - "!charts/gha-runner-scale-set-controller/**"
-      - "!charts/gha-runner-scale-set/**"
-  push:
-    paths:
-      - "charts/**"
-      - ".github/workflows/arc-validate-chart.yaml"
-      - "!charts/actions-runner-controller/docs/**"
-      - "!**.md"
-      - "!charts/gha-runner-scale-set-controller/**"
-      - "!charts/gha-runner-scale-set/**"
+  # pull_request:
+  #   branches:
+  #     - master
+  #   paths:
+  #     - "charts/**"
+  #     - ".github/workflows/arc-validate-chart.yaml"
+  #     - "!charts/actions-runner-controller/docs/**"
+  #     - "!**.md"
+  #     - "!charts/gha-runner-scale-set-controller/**"
+  #     - "!charts/gha-runner-scale-set/**"
+  # push:
+  #   paths:
+  #     - "charts/**"
+  #     - ".github/workflows/arc-validate-chart.yaml"
+  #     - "!charts/actions-runner-controller/docs/**"
+  #     - "!**.md"
+  #     - "!charts/gha-runner-scale-set-controller/**"
+  #     - "!charts/gha-runner-scale-set/**"
   workflow_dispatch:
 env:
   KUBE_SCORE_VERSION: 1.10.0

@@ -1,14 +1,14 @@
 name: Validate ARC Runners
 
 on:
-  pull_request:
-    branches:
-      - "**"
-    paths:
-      - "runner/**"
-      - "test/startup/**"
-      - "!**.md"
-
+  # pull_request:
+  #   branches:
+  #     - "**"
+  #   paths:
+  #     - "runner/**"
+  #     - "test/startup/**"
+  #     - "!**.md"
+  workflow_dispatch:
 permissions:
   contents: read
 
