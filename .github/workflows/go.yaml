@@ -14,7 +14,8 @@ on:
       - "**.go"
       - "go.mod"
       - "go.sum"
-
+  workflow_dispatch:
+    
 permissions:
   contents: read
 
