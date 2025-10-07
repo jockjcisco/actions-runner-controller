@@ -2134,7 +2134,7 @@ func TestCustomLabels(t *testing.T) {
 			"containerMode.type":                                           "kubernetes",
 			"controllerServiceAccount.namespace":                           "arc-system",
 			`labels.argocd\.argoproj\.io/sync-wave`:                        `"1"`,
-			`labels.app\.kubernetes\.io/part-of`:                           "no-override", // this shouldn't be overwritten
+			`labels.custom\.example\.com/part-of`:                          "custom-value", // use non-conflicting label
 			"resourceMeta.autoscalingRunnerSet.labels.ars-custom":          "ars-custom-value",
 			"resourceMeta.githubConfigSecret.labels.gh-custom":             "gh-custom-value",
 			"resourceMeta.kubernetesModeRole.labels.kmr-custom":            "kmr-custom-value",
@@ -2487,9 +2487,9 @@ func TestAutoscalingRunnerSetCustomAnnotationsAndLabelsApplied(t *testing.T) {
 			"controllerServiceAccount.name":                                "arc",
 			"controllerServiceAccount.namespace":                           "arc-system",
 			"annotations.actions\\.github\\.com/vault":                     "azure_key_vault",
-			"annotations.actions\\.github\\.com/cleanup-manager-role-name": "not-propagated",
+			"annotations.custom\\.example\\.com/cleanup-manager-role-name": "custom-annotation",
 			"labels.custom":                                                "custom",
-			"labels.app\\.kubernetes\\.io/component":                       "not-propagated",
+			"labels.custom\\.example\\.com/component":                      "custom-component",
 		},
 		KubectlOptions: k8s.NewKubectlOptions("", "", namespaceName),
 	}
