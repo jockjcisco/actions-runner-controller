@@ -15,7 +15,7 @@ import (
 func TestClientProxy(t *testing.T) {
 	serverCalled := false
 
-	proxy := testserver.New(t, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	proxy := testserver.New(&testingTWrapper{t}, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		serverCalled = true
 	}))
 

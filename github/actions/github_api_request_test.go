@@ -105,7 +105,7 @@ func TestNewActionsServiceRequest(t *testing.T) {
 	t.Run("manages authentication", func(t *testing.T) {
 		t.Run("client is brand new", func(t *testing.T) {
 			token := defaultActionsToken(t)
-			server := testserver.New(t, nil, testserver.WithActionsToken(token))
+			server := testserver.New(&testingTWrapper{t}, nil, testserver.WithActionsToken(token))
 
 			client, err := actions.NewClient(server.ConfigURLForOrg("my-org"), defaultCreds)
 			require.NoError(t, err)
@@ -118,7 +118,7 @@ func TestNewActionsServiceRequest(t *testing.T) {
 
 		t.Run("admin token is about to expire", func(t *testing.T) {
 			newToken := defaultActionsToken(t)
-			server := testserver.New(t, nil, testserver.WithActionsToken(newToken))
+			server := testserver.New(&testingTWrapper{t}, nil, testserver.WithActionsToken(newToken))
 
 			client, err := actions.NewClient(server.ConfigURLForOrg("my-org"), defaultCreds)
 			require.NoError(t, err)
@@ -140,7 +140,7 @@ func TestNewActionsServiceRequest(t *testing.T) {
 				w.Write([]byte(errMessage))
 			}
 			server := testserver.New(
-				t,
+				&testingTWrapper{t},
 				nil,
 				testserver.WithActionsToken("random-token"),
 				testserver.WithActionsToken(newToken),
@@ -181,7 +181,7 @@ func TestNewActionsServiceRequest(t *testing.T) {
 				w.WriteHeader(http.StatusCreated)
 				_ = json.NewEncoder(w).Encode(resp)
 			}
-			server := testserver.New(t, nil, testserver.WithActionsToken("random-token"), testserver.WithActionsToken(newToken), testserver.WithActionsRegistrationTokenHandler(unauthorizedHandler))
+			server := testserver.New(&testingTWrapper{t}, nil, testserver.WithActionsToken("random-token"), testserver.WithActionsToken(newToken), testserver.WithActionsRegistrationTokenHandler(unauthorizedHandler))
 			client, err := actions.NewClient(server.ConfigURLForOrg("my-org"), defaultCreds)
 			require.NoError(t, err)
 			expiringToken := "expiring-token"
@@ -198,7 +198,7 @@ func TestNewActionsServiceRequest(t *testing.T) {
 
 		t.Run("token is currently valid", func(t *testing.T) {
 			tokenThatShouldNotBeFetched := defaultActionsToken(t)
-			server := testserver.New(t, nil, testserver.WithActionsToken(tokenThatShouldNotBeFetched))
+			server := testserver.New(&testingTWrapper{t}, nil, testserver.WithActionsToken(tokenThatShouldNotBeFetched))
 
 			client, err := actions.NewClient(server.ConfigURLForOrg("my-org"), defaultCreds)
 			require.NoError(t, err)
@@ -213,7 +213,7 @@ func TestNewActionsServiceRequest(t *testing.T) {
 	})
 
 	t.Run("builds the right URL including api version", func(t *testing.T) {
-		server := testserver.New(t, nil)
+		server := testserver.New(&testingTWrapper{t}, nil)
 
 		client, err := actions.NewClient(server.ConfigURLForOrg("my-org"), defaultCreds)
 		require.NoError(t, err)
@@ -232,7 +232,7 @@ func TestNewActionsServiceRequest(t *testing.T) {
 	})
 
 	t.Run("populates header", func(t *testing.T) {
-		server := testserver.New(t, nil)
+		server := testserver.New(&testingTWrapper{t}, nil)
 
 		client, err := actions.NewClient(server.ConfigURLForOrg("my-org"), defaultCreds)
 		require.NoError(t, err)
