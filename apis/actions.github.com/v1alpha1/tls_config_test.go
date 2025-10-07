@@ -4,12 +4,12 @@ import (
 	"crypto/tls"
 	"crypto/x509"
 	"net/http"
+	"net/http/httptest"
 	"os"
 	"path/filepath"
 	"testing"
 
 	"github.com/actions/actions-runner-controller/apis/actions.github.com/v1alpha1"
-	"github.com/actions/actions-runner-controller/github/actions/testserver"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	v1 "k8s.io/api/core/v1"
@@ -76,10 +76,11 @@ func TestGitHubServerTLSConfig_ToCertPool(t *testing.T) {
 
 		// can be used to communicate with a server
 		serverSuccessfullyCalled := false
-		server := testserver.NewUnstarted(t, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		server := httptest.NewUnstartedServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			serverSuccessfullyCalled = true
 			w.WriteHeader(http.StatusOK)
 		}))
+		defer server.Close()
 
 		cert, err := tls.LoadX509KeyPair(
 			filepath.Join(certsFolder, "server.crt"),

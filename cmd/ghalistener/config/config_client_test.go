@@ -3,6 +3,7 @@ package config_test
 import (
 	"context"
 	"crypto/tls"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -18,6 +19,22 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+// testingTWrapper wraps *testing.T to implement ginkgo.GinkgoTInterface
+type testingTWrapper struct {
+	*testing.T
+}
+
+// Attr implements the missing method from ginkgo.GinkgoTInterface
+func (w *testingTWrapper) Attr(key, value string) {
+	// This is a no-op for testing.T compatibility
+}
+
+// Output implements the missing method from ginkgo.GinkgoTInterface  
+func (w *testingTWrapper) Output() io.Writer {
+	// Return a basic writer for testing.T compatibility
+	return os.Stdout
+}
+
 func TestCustomerServerRootCA(t *testing.T) {
 	ctx := context.Background()
 	certsFolder := filepath.Join(
@@ -31,7 +48,7 @@ func TestCustomerServerRootCA(t *testing.T) {
 
 	serverCalledSuccessfully := false
 
-	server := testserver.NewUnstarted(t, http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+	server := testserver.NewUnstarted(&testingTWrapper{t}, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		serverCalledSuccessfully = true
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte(`{"count": 0}`))
